@@ -18,6 +18,10 @@ inputs:
     description: 'Whether to upload built artifacts'
     required: false
     default: 'true'
+  retention-days:
+    description: 'How many days to retain uploaded build artifact'
+    required: false
+    default: '90'
 
 runs:
   using: 'composite'
@@ -48,6 +52,7 @@ runs:
       with:
         name: macos
         path: ${{ inputs.working-directory }}/${{ inputs.build-dir }}/macos/macos.tar
+        retention-days: ${{ inputs.retention-days }}
 
     - name: Build Windows application
       working-directory: ${{ inputs.working-directory }}
@@ -70,6 +75,7 @@ runs:
       with:
         name: windows
         path: ${{ inputs.working-directory }}/${{ inputs.build-dir }}/windows/windows.zip
+        retention-days: ${{ inputs.retention-days }}
 
     - name: Build Linux application
       working-directory: ${{ inputs.working-directory }}
@@ -92,3 +98,4 @@ runs:
       with:
         name: linux
         path: ${{ inputs.working-directory }}/${{ inputs.build-dir }}/linux/linux.tar
+        retention-days: ${{ inputs.retention-days }}
