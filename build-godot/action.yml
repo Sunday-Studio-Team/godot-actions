@@ -19,7 +19,7 @@ inputs:
     required: false
     default: 'true'
   retention-days:
-    description: 'How many days to retain uploaded build artifact'
+    description: 'The number of days build artifacts will be retained'
     required: false
     default: '90'
 
