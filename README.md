@@ -43,6 +43,10 @@ This action builds macOS, Windows, and Linux executables for the Godot project w
 
 ### Inputs
 
+#### `working-directory`
+
+The path to the project directory. Default `'./'`.
+
 #### `build-dir`
 
 **Required** The chosen build directory. Default `'build'`.
@@ -50,6 +54,14 @@ This action builds macOS, Windows, and Linux executables for the Godot project w
 #### `godot-executable`
 
 The path to the Godot executable. Default `/Applications/Godot.app/Contents/MacOS/Godot`.
+
+#### `upload-artifacts`
+
+Whether to upload built artifacts. Default `'true'`.
+
+#### `retention-days`
+
+The number of days build artifacts will be retained. Default `'90'`.
 
 ### Example usage
 
