@@ -1,5 +1,5 @@
 name: 'Install Godot'
-description: 'Installs the Godot engine for macOS'
+description: 'Installs the Godot engine for macOS or Linux'
 
 inputs:
   godot-version:
@@ -19,18 +19,36 @@ outputs:
 runs:
   using: 'composite'
   steps:
+    - name: Set up environment
+      shell: bash
+      run: |
+        if [ "$RUNNER_OS" == "macOS" ]; then
+          echo "GODOT_PLATFORM_STR=macos.universal" >> $GITHUB_ENV
+          echo "GODOT_INSTALL_SRC=./Godot.app" >> $GITHUB_ENV
+          echo "GODOT_INSTALL_DST=/Applications/Godot.app" >> $GITHUB_ENV
+          echo "GODOT_EXECUTABLE=/Applications/Godot.app/Contents/MacOS/Godot" >> $GITHUB_ENV
+          echo "GODOT_TEMPLATES_DIR=/Users/runner/Library/Application Support/Godot/export_templates" >> $GITHUB_ENV
+        elif [ "$RUNNER_OS" == "Linux" ]; then
+          echo "GODOT_PLATFORM_STR=linux.x86_64" >> $GITHUB_ENV
+          echo "GODOT_INSTALL_SRC=./Godot_v4.4.1-stable_linux.x86_64" >> $GITHUB_ENV
+          echo "GODOT_INSTALL_DST=/usr/local/bin/godot" >> $GITHUB_ENV
+          echo "GODOT_EXECUTABLE=/usr/local/bin/godot" >> $GITHUB_ENV
+          echo "GODOT_TEMPLATES_DIR=/usr/local/share/godot/templates" >> $GITHUB_ENV
+        else
+          echo "$RUNNER_OS not supported"
+          exit 1
+        fi
+    
     - name: Install Godot
       shell: bash
       run: |
-        curl -L -o ./godot.zip "https://github.com/godotengine/godot/releases/download/${{ inputs.godot-version }}-stable/Godot_v${{ inputs.godot-version }}-stable_macos.universal.zip"
+        curl -L -o ./godot.zip "https://github.com/godotengine/godot/releases/download/${{ inputs.godot-version }}-stable/Godot_v${{ inputs.godot-version }}-stable_$GODOT_PLATFORM_STR.zip"
         unzip ./godot.zip
-        mv ./Godot.app /Applications/Godot.app
+        mv $GODOT_INSTALL_SRC $GODOT_INSTALL_DST
 
     - name: Install Godot templates
       if: ${{ inputs.install-templates }}
       shell: bash
-      env:
-        GODOT_TEMPLATES_DIR: /Users/runner/Library/Application Support/Godot/export_templates
       run: |
         curl -L -o ./godot-templates.zip "https://github.com/godotengine/godot/releases/download/${{ inputs.godot-version }}-stable/Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz"
         unzip ./godot-templates.zip
@@ -39,7 +57,5 @@ runs:
 
     - name: Report back the executable location
       shell: bash
-      env:
-        GODOT_EXECUTABLE: /Applications/Godot.app/Contents/MacOS/Godot
       run: echo "GODOT_EXECUTABLE=${{ env.GODOT_EXECUTABLE }}" >> $GITHUB_OUTPUT
       id: assign-executable
