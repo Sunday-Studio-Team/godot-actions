@@ -33,7 +33,7 @@ runs:
           echo "GODOT_INSTALL_SRC=./Godot_v4.4.1-stable_linux.x86_64" >> $GITHUB_ENV
           echo "GODOT_INSTALL_DST=/usr/local/bin/godot" >> $GITHUB_ENV
           echo "GODOT_EXECUTABLE=/usr/local/bin/godot" >> $GITHUB_ENV
-          echo "GODOT_TEMPLATES_DIR=/usr/local/share/godot/templates" >> $GITHUB_ENV
+          echo "GODOT_TEMPLATES_DIR=/home/runner/.local/share/godot/export_templates" >> $GITHUB_ENV
         else
           echo "$RUNNER_OS not supported"
           exit 1
