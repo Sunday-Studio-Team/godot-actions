@@ -53,7 +53,7 @@ runs:
         curl -L -o ./godot-templates.zip "https://github.com/godotengine/godot/releases/download/${{ inputs.godot-version }}-stable/Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz"
         unzip ./godot-templates.zip
         sudo mkdir -p "$GODOT_TEMPLATES_DIR"
-        mv ./templates "$GODOT_TEMPLATES_DIR/${{ inputs.godot-version }}.stable"
+        sudo mv ./templates "$GODOT_TEMPLATES_DIR/${{ inputs.godot-version }}.stable"
 
     - name: Report back the executable location
       shell: bash
